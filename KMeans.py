@@ -5,7 +5,7 @@ from cluster import Cluster
 import numpy as np
 
 
-def find_cluster(curr, centroids):
+def find_cluster(curr, centroids): # finds the closest centroid to the current position
     min_dist = math.inf
     centroid = centroids[0]
     for c in centroids:
@@ -26,18 +26,18 @@ class Kmeans(Cluster):
         self.max_iter = max_iterations
 
     def fit(self, X):
-        c_index = np.random.choice(X.shape[0], size=self.k, replace=False)
-        centroids = X[c_index]
-        clusters = []
+        c_index = np.random.choice(X.shape[0], size=self.k, replace=False) # get the centroid indexes
+        centroids = X[c_index] # get the centroids
+        clusters = [] # keep track of which points go in which cluster
         counter = 0
         while counter < self.max_iter:
-            clusters.clear()
+            clusters.clear() # rebuild the clusters each time
             for i in range(self.k):
                 clusters.append([])
             for curr in X:
-                clusters[np.where(centroids == find_cluster(curr, centroids))[0][0]].append(curr)
+                clusters[np.where(centroids == find_cluster(curr, centroids))[0][0]].append(curr) # put the current point into the correct cluster
             new_centroids = []
-            for i in range(len(clusters)):
+            for i in range(len(clusters)): # calculate the new clusters
                 new_centroids.append([])
                 total_x = 0
                 total_y = 0
@@ -55,7 +55,7 @@ class Kmeans(Cluster):
                 centroids = new_centroids
             counter += 1
         cluster_id = []
-        for item in X:
+        for item in X: # transform the clusters into a single array
             for i in range(len(clusters)):
                 for pair in clusters[i]:
                     if (item[0] == pair[0]) and (item[1] == pair[1]):
@@ -65,15 +65,3 @@ class Kmeans(Cluster):
                     continue
                 break
         return np.array(cluster_id), centroids
-
-
-
-
-"""
-if __name__ == "__main__":
-    meanie = Kmeans(folds=2)
-    fitput = np.array([[0, 0], [2, 2], [0, 2], [2, 0], [10, 10], [8, 8], [10, 8], [8, 10]])
-    results = meanie.fit(fitput)
-    print(results[0])
-    print(results[1])
-"""
