@@ -45,7 +45,7 @@ class Kmeans(Cluster):
                     total_x += pair[0]
                     total_y += pair[1]
                 if len(clusters[i]) > 0:
-                    new_centroids[i] = ([(total_x // len(clusters[i])), (total_y // len(clusters[i]))])
+                    new_centroids[i] = ([(total_x / len(clusters[i])), (total_y / len(clusters[i]))])
                 else:
                     new_centroids[i] = centroids[i]
             new_centroids = np.array(new_centroids)
@@ -64,7 +64,7 @@ class Kmeans(Cluster):
                 else:
                     continue
                 break
-        return cluster_id, centroids
+        return np.array(cluster_id), centroids
 
 
 
